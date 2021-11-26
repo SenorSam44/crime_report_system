@@ -5,7 +5,13 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card">
-                    <div class="card-header">Submit a report</div>
+                    <div class="card-header">
+                        @if(isset($report))
+                            Edit your report
+                        @else
+                            Submit a report
+                        @endif
+                    </div>
 
                     <div class="card-body">
                         @if (session('session'))
@@ -14,18 +20,25 @@
                             </div>
                         @endif
 
-                        <form method="POST" action="{{ route('submit-a-report.store') }}">
+                        <form method="POST"
+                              @if(isset($report))
+                              action="{{ route('submit-a-report.update', $report->id) }}"
+                              @else
+                              action="{{ route('submit-a-report.store') }}"
+                            @endif
+                        >
                             @csrf
 
                             <div class="form-group row">
-                                <label for="crime" class="col-md-4 col-form-label text-md-right">{{ __('Describe crime/Incident') }}</label>
+                                <label for="crime"
+                                       class="col-md-4 col-form-label text-md-right">{{ __('Describe crime/Incident') }}</label>
 
                                 <div class="col-md-6">
                                     <textarea id="crime"
                                               name="crime"
                                               class="form-control"
                                               rows="5"
-                                              autofocus></textarea>
+                                              autofocus>@if(isset($report)){{$report->crime}}@endif</textarea>
 
                                     @error('crime')
                                     <span class="invalid-feedback" role="alert">
@@ -35,10 +48,17 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="crimeTime" class="col-md-4 col-form-label text-md-right">{{ __('Date/Time Occurred') }}</label>
+                                <label for="crimeTime"
+                                       class="col-md-4 col-form-label text-md-right">{{ __('Date/Time Occurred') }}</label>
 
                                 <div class="col-md-6">
-                                   <input type="datetime-local" name="crimeTime" min="2017-06-01T08:30" max="2022-06-30T16:30" value="2021-06-30T16:30">
+                                    @if(isset($report))
+                                        <input type="datetime-local" name="crimeTime" min="2017-06-01T08:30"
+                                               max="2022-06-30T16:30" value="{{$report->crimeTime}}">
+                                    @else
+                                        <input type="datetime-local" name="crimeTime" min="2017-06-01T08:30"
+                                               max="2022-06-30T16:30" value="2021-06-30T16:30">
+                                    @endif
 
                                     @error('crimeTime')
                                     <span class="invalid-feedback" role="alert">
@@ -49,10 +69,17 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="reportTime" class="col-md-4 col-form-label text-md-right">{{ __('Date/Time Reported') }}</label>
+                                <label for="reportTime"
+                                       class="col-md-4 col-form-label text-md-right">{{ __('Date/Time Reported') }}</label>
 
                                 <div class="col-md-6">
-                                    <input type="datetime-local" name="reportTime" min="2017-06-01T08:30" max="2022-06-30T16:30" value="2021-06-30T16:30">
+                                    @if(isset($report))
+                                        <input type="datetime-local" name="reportTime" min="2017-06-01T08:30"
+                                               max="2022-06-30T16:30" value="{{$report->reportTime}}">
+                                    @else
+                                        <input type="datetime-local" name="reportTime" min="2017-06-01T08:30"
+                                               max="2022-06-30T16:30" value="2021-06-30T16:30">
+                                    @endif
 
                                     @error('reportTime')
                                     <span class="invalid-feedback" role="alert">
@@ -64,7 +91,8 @@
 
                             <div class="form-group row">
                                 <div class="col-12">Location</div>
-                                <label for="district" class="col-md-4 col-form-label text-md-right">{{ __('District') }}</label>
+                                <label for="district"
+                                       class="col-md-4 col-form-label text-md-right">{{ __('District') }}</label>
 
                                 <div class="col-md-6">
                                     <select name="district">
@@ -72,7 +100,8 @@
                                         <option>District 2</option>
                                     </select>
                                 </div>
-                                <label for="thana" class="col-md-4 col-form-label text-md-right">{{ __('Thana') }}</label>
+                                <label for="thana"
+                                       class="col-md-4 col-form-label text-md-right">{{ __('Thana') }}</label>
 
                                 <div class="col-md-6">
                                     <select name="thana">
@@ -83,7 +112,8 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="report-time" class="col-md-4 col-form-label text-md-right">{{ __('Adress') }}</label>
+                                <label for="report-time"
+                                       class="col-md-4 col-form-label text-md-right">{{ __('Adress') }}</label>
 
                                 <div class="col-md-6">
                                    <textarea name="address"
